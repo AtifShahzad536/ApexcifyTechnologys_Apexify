@@ -104,11 +104,29 @@ const Checkout = () => {
                 await api.post('/coupons/apply', { code: appliedCoupon.code });
             }
 
+            if (paymentMethod === 'Credit Card') {
+                // Create Stripe Checkout Session
+                try {
+                    const sessionRes = await api.post('/payment/create-checkout-session', {
+                        orderId: data._id
+                    });
+
+                    // Redirect to Stripe
+                    window.location.href = sessionRes.data.url;
+                    return;
+                } catch (stripeError) {
+                    console.error('Stripe session error:', stripeError);
+                    alert('Order created but payment failed. Please try paying from your orders page.');
+                    navigate(`/orders/${data._id}`);
+                    return;
+                }
+            }
+
             clearCart();
             navigate(`/orders`);
         } catch (error) {
+            console.error('Order error:', error);
             alert(error.response?.data?.message || 'Failed to place order');
-        } finally {
             setLoading(false);
         }
     };
@@ -195,7 +213,7 @@ const Checkout = () => {
                                     </div>
 
                                     <div className="space-y-3">
-                                        {['Credit Card', 'PayPal', 'Cash on Delivery', 'Stripe'].map((method) => (
+                                        {['Credit Card', 'Cash on Delivery'].map((method) => (
                                             <label
                                                 key={method}
                                                 className={`flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all ${paymentMethod === method

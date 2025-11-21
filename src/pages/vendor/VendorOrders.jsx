@@ -18,7 +18,7 @@ const VendorOrders = () => {
 
     const fetchOrders = async () => {
         try {
-            const { data } = await api.get('/orders/vendor');
+            const { data } = await api.get('/vendor/orders');
             setOrders(data.orders);
         } catch (error) {
             console.error('Failed to fetch orders:', error);
@@ -87,8 +87,8 @@ const VendorOrders = () => {
                                     key={status}
                                     onClick={() => setFilter(status)}
                                     className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-colors whitespace-nowrap ${filter === status
-                                            ? 'bg-primary-600 text-white'
-                                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                        ? 'bg-primary-600 text-white'
+                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                                         }`}
                                 >
                                     {status}
@@ -124,7 +124,7 @@ const VendorOrders = () => {
                                             {new Date(order.createdAt).toLocaleDateString()}
                                         </td>
                                         <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                                            ${order.totalAmount.toFixed(2)}
+                                            ${(order.totalAmount || order.totalPrice || 0).toFixed(2)}
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
@@ -161,6 +161,7 @@ const VendorOrders = () => {
                 </motion.div>
             </div>
         </div>
+
     );
 };
 

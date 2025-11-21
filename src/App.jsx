@@ -17,12 +17,14 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
 import OrderDetails from './pages/OrderDetails';
+import OrderSuccess from './pages/OrderSuccess';
 import Profile from './pages/Profile';
 import Wishlist from './pages/Wishlist';
 
 // Vendor Pages
 import VendorRegister from './pages/vendor/VendorRegister';
 import VendorDashboard from './pages/vendor/VendorDashboard';
+import VendorProducts from './pages/vendor/VendorProducts';
 import AddProduct from './pages/vendor/AddProduct';
 import EditProduct from './pages/vendor/EditProduct';
 import VendorOrders from './pages/vendor/VendorOrders';
@@ -65,6 +67,11 @@ function App() {
                                             <Checkout />
                                         </PrivateRoute>
                                     } />
+                                    <Route path="/order-success" element={
+                                        <PrivateRoute>
+                                            <OrderSuccess />
+                                        </PrivateRoute>
+                                    } />
                                     <Route path="/orders" element={
                                         <PrivateRoute>
                                             <Orders />
@@ -92,12 +99,27 @@ function App() {
                                             <VendorDashboard />
                                         </PrivateRoute>
                                     } />
+                                    <Route path="/vendor/products" element={
+                                        <PrivateRoute allowedRoles={['vendor']}>
+                                            <VendorProducts />
+                                        </PrivateRoute>
+                                    } />
                                     <Route path="/vendor/products/add" element={
                                         <PrivateRoute allowedRoles={['vendor']}>
                                             <AddProduct />
                                         </PrivateRoute>
                                     } />
+                                    <Route path="/vendor/add-product" element={
+                                        <PrivateRoute allowedRoles={['vendor']}>
+                                            <AddProduct />
+                                        </PrivateRoute>
+                                    } />
                                     <Route path="/vendor/products/edit/:id" element={
+                                        <PrivateRoute allowedRoles={['vendor']}>
+                                            <EditProduct />
+                                        </PrivateRoute>
+                                    } />
+                                    <Route path="/vendor/edit-product/:id" element={
                                         <PrivateRoute allowedRoles={['vendor']}>
                                             <EditProduct />
                                         </PrivateRoute>

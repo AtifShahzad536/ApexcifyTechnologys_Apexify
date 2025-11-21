@@ -33,26 +33,9 @@ const StatCard = ({ title, value, icon, trend, color }) => (
 
 const VendorDashboard = () => {
     const [stats, setStats] = useState(null);
+    const [charts, setCharts] = useState({ revenueData: [], salesData: [] });
     const [recentOrders, setRecentOrders] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    // Mock data for charts - in a real app, this would come from the API
-    const revenueData = [
-        { name: 'Mon', value: 4000 },
-        { name: 'Tue', value: 3000 },
-        { name: 'Wed', value: 2000 },
-        { name: 'Thu', value: 2780 },
-        { name: 'Fri', value: 1890 },
-        { name: 'Sat', value: 2390 },
-        { name: 'Sun', value: 3490 },
-    ];
-
-    const salesData = [
-        { name: 'Electronics', value: 400 },
-        { name: 'Clothing', value: 300 },
-        { name: 'Home', value: 300 },
-        { name: 'Books', value: 200 },
-    ];
 
     useEffect(() => {
         fetchDashboardData();
@@ -60,13 +43,10 @@ const VendorDashboard = () => {
 
     const fetchDashboardData = async () => {
         try {
-            const [statsRes, ordersRes] = await Promise.all([
-                api.get('/vendor/dashboard'),
-                api.get('/vendor/orders')
-            ]);
-
-            setStats(statsRes.data);
-            setRecentOrders(ordersRes.data.orders.slice(0, 5));
+            const { data } = await api.get('/vendor/dashboard');
+            setStats(data.stats);
+            setCharts(data.charts || { revenueData: [], salesData: [] });
+            setRecentOrders(data.recentOrders || []);
         } catch (error) {
             console.error('Failed to fetch dashboard data:', error);
         } finally {
@@ -145,7 +125,7 @@ const VendorDashboard = () => {
                         <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Revenue Overview</h3>
                         <div className="h-[300px] w-full">
                             <ResponsiveContainer width="100%" height={300}>
-                                <AreaChart data={revenueData}>
+                                <AreaChart data={charts.revenueData}>
                                     <defs>
                                         <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                                             <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.3} />
@@ -181,7 +161,7 @@ const VendorDashboard = () => {
                         <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6">Sales by Category</h3>
                         <div className="h-[300px] w-full">
                             <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={salesData}>
+                                <BarChart data={charts.salesData}>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                                     <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} />
                                     <Tooltip

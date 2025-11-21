@@ -27,6 +27,7 @@ const AddProduct = () => {
         discountStartDate: '',
         discountEndDate: ''
     });
+    const [specifications, setSpecifications] = useState([{ key: '', value: '' }]);
 
     const categories = [
         'Electronics',
@@ -48,6 +49,22 @@ const AddProduct = () => {
         });
     };
 
+    const handleSpecificationChange = (index, field, value) => {
+        const newSpecs = [...specifications];
+        newSpecs[index][field] = value;
+        setSpecifications(newSpecs);
+    };
+
+    const addSpecification = () => {
+        setSpecifications([...specifications, { key: '', value: '' }]);
+    };
+
+    const removeSpecification = (index) => {
+        const newSpecs = specifications.filter((_, i) => i !== index);
+        setSpecifications(newSpecs.length > 0 ? newSpecs : [{ key: '', value: '' }]);
+    };
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -63,6 +80,17 @@ const AddProduct = () => {
                 tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
                 featured: formData.featured
             };
+
+            // Add specifications if provided
+            const specsObj = {};
+            specifications.forEach(spec => {
+                if (spec.key && spec.value) {
+                    specsObj[spec.key] = spec.value;
+                }
+            });
+            if (Object.keys(specsObj).length > 0) {
+                productData.specifications = specsObj;
+            }
 
             // Add discount fields if provided
             if (formData.discount) {
@@ -272,6 +300,53 @@ const AddProduct = () => {
                             </Card>
                         </motion.div>
 
+                        {/* Specifications */}
+                        <motion.div {...slideUp} transition={{ delay: 0.4 }}>
+                            <Card className="p-8">
+                                <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                                    <FiTag className="text-indigo-600" />
+                                    Product Specifications
+                                </h2>
+
+                                <div className="space-y-4">
+                                    {specifications.map((spec, index) => (
+                                        <div key={index} className="flex gap-3 items-start">
+                                            <div className="flex-1 grid grid-cols-2 gap-3">
+                                                <Input
+                                                    label={index === 0 ? "Specification Name" : ""}
+                                                    placeholder="e.g., Brand, Color, Size"
+                                                    value={spec.key}
+                                                    onChange={(e) => handleSpecificationChange(index, 'key', e.target.value)}
+                                                />
+                                                <Input
+                                                    label={index === 0 ? "Value" : ""}
+                                                    placeholder="e.g., Apple, Red, Large"
+                                                    value={spec.value}
+                                                    onChange={(e) => handleSpecificationChange(index, 'value', e.target.value)}
+                                                />
+                                            </div>
+                                            <button
+                                                type="button"
+                                                onClick={() => removeSpecification(index)}
+                                                className={`px-3 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors ${index === 0 ? 'mt-6' : ''}`}
+                                                disabled={specifications.length === 1}
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    ))}
+
+                                    <button
+                                        type="button"
+                                        onClick={addSpecification}
+                                        className="w-full py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-primary-500 hover:text-primary-600 transition-colors"
+                                    >
+                                        + Add Specification
+                                    </button>
+                                </div>
+                            </Card>
+                        </motion.div>
+
                         {/* Additional Options */}
                         <motion.div {...slideUp} transition={{ delay: 0.4 }}>
                             <Card className="p-8">
@@ -307,7 +382,7 @@ const AddProduct = () => {
                                 type="button"
                                 variant="outline"
                                 size="lg"
-                                onClick={() => navigate('/vendor')}
+                                onClick={() => navigate('/vendor/dashboard')}
                             >
                                 Cancel
                             </Button>
