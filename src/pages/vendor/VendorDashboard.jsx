@@ -231,7 +231,7 @@ const VendorDashboard = () => {
                                             {new Date(order.createdAt).toLocaleDateString()}
                                         </td>
                                         <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                                            ${order.totalAmount.toFixed(2)}
+                                            ${(order.totalAmount || order.totalPrice || 0).toFixed(2)}
                                         </td>
                                         <td className="px-6 py-4">
                                             <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
