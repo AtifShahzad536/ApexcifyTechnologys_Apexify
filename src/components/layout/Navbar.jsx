@@ -213,9 +213,12 @@ const Navbar = () => {
 
                             {/* User Actions */}
                             {user ? (
-                                <div className="relative group">
+                                <div
+                                    className="relative group"
+                                    onMouseEnter={() => setIsProfileOpen(true)}
+                                    onMouseLeave={() => setIsProfileOpen(false)}
+                                >
                                     <button
-                                        onClick={() => setIsProfileOpen(!isProfileOpen)}
                                         className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 hover:text-primary-600"
                                     >
                                         <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 flex items-center justify-center font-bold border border-primary-200">
@@ -272,7 +275,7 @@ const Navbar = () => {
                                     </AnimatePresence>
                                 </div>
                             ) : (
-                                <div className="flex items-center space-x-4">
+                                <div className="hidden md:flex items-center space-x-4">
                                     <Link to="/login" className="text-sm font-bold text-gray-700 dark:text-gray-300 hover:text-primary-600">Login</Link>
                                     <span className="text-gray-300">|</span>
                                     <Link to="/register" className="text-sm font-bold text-gray-700 dark:text-gray-300 hover:text-primary-600">Sign Up</Link>

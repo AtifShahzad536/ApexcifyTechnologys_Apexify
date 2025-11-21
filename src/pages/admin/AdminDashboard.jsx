@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Button from '../../components/common/Button';
 import { motion } from 'framer-motion';
 import { FiUsers, FiPackage, FiShoppingBag, FiDollarSign } from 'react-icons/fi';
 import api from '../../utils/api';
@@ -78,6 +80,20 @@ const AdminDashboard = () => {
                 />
             </motion.div>
 
+            {/* Quick Actions */}
+            <div className="flex gap-4 mb-8">
+                <Link to="/admin/users">
+                    <Button variant="outline" className="flex items-center gap-2">
+                        <FiUsers /> Manage Users
+                    </Button>
+                </Link>
+                <Link to="/admin/products">
+                    <Button variant="outline" className="flex items-center gap-2">
+                        <FiPackage /> Manage Products
+                    </Button>
+                </Link>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Recent Orders */}
                 <Card>
@@ -100,10 +116,10 @@ const AdminDashboard = () => {
                                                 ${order.totalPrice?.toFixed(2)}
                                             </p>
                                             <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium capitalize ${order.status === 'delivered'
-                                                    ? 'bg-green-100 text-green-600 dark:bg-green-900/30'
-                                                    : order.status === 'cancelled'
-                                                        ? 'bg-red-100 text-red-600 dark:bg-red-900/30'
-                                                        : 'bg-blue-100 text-blue-600 dark:bg-blue-900/30'
+                                                ? 'bg-green-100 text-green-600 dark:bg-green-900/30'
+                                                : order.status === 'cancelled'
+                                                    ? 'bg-red-100 text-red-600 dark:bg-red-900/30'
+                                                    : 'bg-blue-100 text-blue-600 dark:bg-blue-900/30'
                                                 }`}>
                                                 {order.status}
                                             </span>
