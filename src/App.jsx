@@ -20,6 +20,7 @@ import OrderDetails from './pages/OrderDetails';
 import OrderSuccess from './pages/OrderSuccess';
 import Profile from './pages/Profile';
 import Wishlist from './pages/Wishlist';
+import NotFound from './pages/NotFound';
 
 // Vendor Pages
 import VendorRegister from './pages/vendor/VendorRegister';
@@ -146,6 +147,9 @@ function App() {
                                             <AdminProducts />
                                         </PrivateRoute>
                                     } />
+
+                                    {/* 404 Not Found */}
+                                    <Route path="*" element={<NotFound />} />
                                 </Routes>
                             </main>
                             <Footer />
