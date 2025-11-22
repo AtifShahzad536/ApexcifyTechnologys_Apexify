@@ -108,7 +108,7 @@ const Checkout = () => {
                 // Create Stripe Checkout Session
                 try {
                     const sessionRes = await api.post('/payment/create-checkout-session', {
-                        orderId: data._id
+                        orderId: data.order._id
                     });
 
                     // Redirect to Stripe
@@ -117,7 +117,7 @@ const Checkout = () => {
                 } catch (stripeError) {
                     console.error('Stripe session error:', stripeError);
                     alert('Order created but payment failed. Please try paying from your orders page.');
-                    navigate(`/orders/${data._id}`);
+                    navigate(`/orders/${data.order._id}`);
                     return;
                 }
             }
